@@ -1,5 +1,7 @@
 #include "MyCharacter.h"
 
+#include "NavigationComponent.h"
+#include "NavigationSubsystem.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -25,6 +27,14 @@ AMyCharacter::AMyCharacter()
 	//스프링암이 폰 컨트롤 로테이션을 따라감, 비활성화시 카메라가 안움직임
 	SpringArmComponent_->bUsePawnControlRotation = true;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	NavigationComponent_ = CreateDefaultSubobject<UNavigationComponent>("Navigation");
+}
+
+void AMyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
 }
 
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -35,6 +45,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveR", this, &AMyCharacter::MoveR);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::LookUp);
 	PlayerInputComponent->BindAxis("LookRight", this, &AMyCharacter::LookRIght);
+
+	PlayerInputComponent->BindAction("Navigation", IE_Pressed, this, &AMyCharacter::Navigation);
 }
 
 void AMyCharacter::MoveF(float _Amount)
@@ -65,5 +77,11 @@ void AMyCharacter::LookUp(float _Amount)
 void AMyCharacter::LookRIght(float _Amount)
 {
 	AddControllerYawInput(_Amount);
+}
+
+void AMyCharacter::Navigation()
+{
+	UNavigationSubsystem* NavSubsystem = GetWorld()->GetSubsystem<UNavigationSubsystem>();
+	NavSubsystem->ShowNavigation(GetActorLocation());
 }
 

@@ -11,6 +11,7 @@ class ARCHIVE_API AMyCharacter : public ACharacter
 
 public:
 	AMyCharacter();
+	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* _PlayerInputComponent) override;
 
 private:
@@ -19,9 +20,13 @@ private:
 	void LookUp(float _Amount);
 	void LookRIght(float _Amount);
 
+	void Navigation();
+
 private:
 	UPROPERTY()
 	TObjectPtr<class USpringArmComponent> SpringArmComponent_;
 	UPROPERTY()
 	TObjectPtr<class UCameraComponent> CameraComponent_;
+	UPROPERTY()
+	TObjectPtr<class UNavigationComponent> NavigationComponent_;
 };
