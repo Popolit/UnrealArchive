@@ -18,10 +18,14 @@ private:
 	void MoveR(float _Amount);
 	void LookUp(float _Amount);
 	void LookRIght(float _Amount);
+	void Action();
+	void SubAction();
 
 private:
 	UPROPERTY()
 	TObjectPtr<class USpringArmComponent> SpringArmComponent_;
 	UPROPERTY()
 	TObjectPtr<class UCameraComponent> CameraComponent_;
+	UPROPERTY(VisibleDefaultsOnly)
+	TObjectPtr<class UWeaponComponent> WeaponComponent_;
 };

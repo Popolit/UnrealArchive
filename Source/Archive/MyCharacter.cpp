@@ -1,5 +1,6 @@
 #include "MyCharacter.h"
 
+#include "WeaponComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -17,7 +18,7 @@ AMyCharacter::AMyCharacter()
 	SpringArmComponent_->SetupAttachment(GetMesh());
 	CameraComponent_->SetupAttachment(SpringArmComponent_);
 
-	
+	WeaponComponent_ = CreateDefaultSubobject<UWeaponComponent>("Weapon");
 
 	//true일 경우, 바라보는 방향과 카메라가 동기화
 	bUseControllerRotationYaw = false;
@@ -35,6 +36,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveR", this, &AMyCharacter::MoveR);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::LookUp);
 	PlayerInputComponent->BindAxis("LookRight", this, &AMyCharacter::LookRIght);
+	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &AMyCharacter::Action);
+	PlayerInputComponent->BindAction("SubAction", IE_Pressed, this, &AMyCharacter::SubAction);
 }
 
 void AMyCharacter::MoveF(float _Amount)
@@ -65,5 +68,15 @@ void AMyCharacter::LookUp(float _Amount)
 void AMyCharacter::LookRIght(float _Amount)
 {
 	AddControllerYawInput(_Amount);
+}
+
+void AMyCharacter::Action()
+{
+	WeaponComponent_->DoAction();
+}
+
+void AMyCharacter::SubAction()
+{
+	WeaponComponent_->SubAction();
 }
 
